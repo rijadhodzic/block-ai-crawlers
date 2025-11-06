@@ -68,12 +68,11 @@ Disallow: /
 
 User-agent: Applebot
 Disallow: /
-```txt
 
 ## 🧱 2. Block via `.htaccess` (Apache)
 If you’re using Apache, add this code to your `.htaccess` file in the web root:
 
-```txt
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
@@ -81,4 +80,34 @@ RewriteEngine On
 RewriteCond %{HTTP_USER_AGENT} (GPTBot|ChatGPT|Google-Extended|CCBot|anthropic-ai|ClaudeBot|OAI-SearchBot|PerplexityBot|Amazonbot|Applebot) [NC]
 RewriteRule .* - [F,L]
 </IfModule>
-```txt
+This returns `403 Forbidden` to blocked crawlers.
+
+## ⚙️ 3. Block via Nginx
+If you’re running Nginx, edit your site config (/etc/nginx/sites-available/example.com):
+if ($http_user_agent ~* (GPTBot|ChatGPT|Google-Extended|CCBot|anthropic-ai|ClaudeBot|OAI-SearchBot|PerplexityBot|Amazonbot|Applebot)) {
+    return 403;
+}
+Then reload:
+sudo systemctl reload nginx
+
+## 🔒 4. Add “no AI” headers & meta tags
+For extra protection, add these in your HTML <head>:
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noai">
+<meta name="bingbot" content="noai">
+<meta name="anthropic-ai" content="noai">
+<meta name="openai" content="noai">
+<meta name="perplexity-ai" content="noai">
+Or in your Apache config:
+Header set X-Robots-Tag "noindex, noai, noimageai"
+
+## 🛡️ 5. Optional: Advanced protection
+For even stronger protection:
+Use Cloudflare Firewall to block known AI crawler IPs or patterns.
+Enable rate limiting to stop mass scrapers.
+Use CAPTCHA or JS challenges on high-value pages.
+Monitor access logs for unusual bot behavior.
+
+## 🤝 Contributing
+Feel free to open a Pull Request to add new AI bots or improvements.
+If you find a new crawler, please share its user-agent and source.
