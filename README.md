@@ -68,3 +68,16 @@ Disallow: /
 
 User-agent: Applebot
 Disallow: /
+
+## 🧱 2. Block via `.htaccess` (Apache)
+
+If you’re using Apache, add this code to your `.htaccess` file in the web root:
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+```txt
+# Block AI bots and scrapers
+RewriteCond %{HTTP_USER_AGENT} (GPTBot|ChatGPT|Google-Extended|CCBot|anthropic-ai|ClaudeBot|OAI-SearchBot|PerplexityBot|Amazonbot|Applebot) [NC]
+RewriteRule .* - [F,L]
+</IfModule>
+
