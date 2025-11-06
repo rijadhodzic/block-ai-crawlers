@@ -1,7 +1,9 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-
-# Block AI bots and scrapers
 RewriteCond %{HTTP_USER_AGENT} (GPTBot|ChatGPT|Google-Extended|CCBot|anthropic-ai|ClaudeBot|OAI-SearchBot|PerplexityBot|Amazonbot|Applebot) [NC]
 RewriteRule .* - [F,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+Header set X-Robots-Tag "noindex, noai, noimageai"
 </IfModule>
